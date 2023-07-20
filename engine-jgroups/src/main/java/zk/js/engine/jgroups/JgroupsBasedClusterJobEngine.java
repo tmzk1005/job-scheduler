@@ -13,21 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package zk.js.engine.jgroups;
 
-plugins {
-    id 'zk.js.java-base-conventions'
-}
+import java.util.concurrent.ExecutorService;
 
-archivesBaseName = "job-scheduler-engine"
+import zk.js.engine.AbstractJobEngine;
+import zk.js.engine.job.JobConverter;
+import zk.js.engine.job.JobStore;
 
-dependencies {
-    implementation "org.projectlombok:lombok"
+public class JgroupsBasedClusterJobEngine extends AbstractJobEngine {
 
-    implementation 'org.slf4j:slf4j-api'
-    implementation 'org.apache.logging.log4j:log4j-core'
-    implementation 'org.apache.logging.log4j:log4j-slf4j-impl'
+    protected JgroupsBasedClusterJobEngine(JobConverter jobConverter, ExecutorService executorService, JobStore jobStore) {
+        super(jobConverter, executorService, jobStore);
+    }
 
-    implementation 'com.fasterxml.jackson.core:jackson-databind'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }

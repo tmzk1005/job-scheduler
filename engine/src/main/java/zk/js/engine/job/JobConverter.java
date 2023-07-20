@@ -13,21 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package zk.js.engine.job;
 
-plugins {
-    id 'zk.js.java-base-conventions'
-}
+public interface JobConverter {
 
-archivesBaseName = "job-scheduler-engine"
+    Job convertJobDefinition(JobDefinition jobDefinition) throws JobConverterException;
 
-dependencies {
-    implementation "org.projectlombok:lombok"
-
-    implementation 'org.slf4j:slf4j-api'
-    implementation 'org.apache.logging.log4j:log4j-core'
-    implementation 'org.apache.logging.log4j:log4j-slf4j-impl'
-
-    implementation 'com.fasterxml.jackson.core:jackson-databind'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }

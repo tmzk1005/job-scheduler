@@ -14,20 +14,12 @@
  * limitations under the License.
  */
 
-plugins {
-    id 'zk.js.java-base-conventions'
-}
+package zk.js.engine.job;
 
-archivesBaseName = "job-scheduler-engine"
+public class JobStoreException extends Exception {
 
-dependencies {
-    implementation "org.projectlombok:lombok"
+    public JobStoreException(String message) {
+        super(message);
+    }
 
-    implementation 'org.slf4j:slf4j-api'
-    implementation 'org.apache.logging.log4j:log4j-core'
-    implementation 'org.apache.logging.log4j:log4j-slf4j-impl'
-
-    implementation 'com.fasterxml.jackson.core:jackson-databind'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }

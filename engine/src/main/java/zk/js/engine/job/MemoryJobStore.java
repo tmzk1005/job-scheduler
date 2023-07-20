@@ -13,21 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package zk.js.engine.job;
 
-plugins {
-    id 'zk.js.java-base-conventions'
-}
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
-archivesBaseName = "job-scheduler-engine"
+public class MemoryJobStore implements JobStore {
 
-dependencies {
-    implementation "org.projectlombok:lombok"
+    private final Map<String, Job> jobs = new ConcurrentHashMap<>(4);
 
-    implementation 'org.slf4j:slf4j-api'
-    implementation 'org.apache.logging.log4j:log4j-core'
-    implementation 'org.apache.logging.log4j:log4j-slf4j-impl'
+    @Override
+    public void saveJob(Job job) {
+        Objects.requireNonNull(job);
+        jobs.put(job.getId(), job);
+    }
 
-    implementation 'com.fasterxml.jackson.core:jackson-databind'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    @Override
+    public Job getJob(String jobId) {
+        Objects.requireNonNull(jobId);
+        return jobs.get(jobId);
+    }
+
+    @Override
+    public long getJobCount() {
+        return jobs.size();
+    }
+
 }

@@ -13,21 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package zk.js.engine.job;
 
-plugins {
-    id 'zk.js.java-base-conventions'
-}
+public class JobConverterException extends Exception {
 
-archivesBaseName = "job-scheduler-engine"
+    public JobConverterException(String message) {
+        super(message);
+    }
 
-dependencies {
-    implementation "org.projectlombok:lombok"
+    public JobConverterException(String message, Throwable throwable) {
+        super(message, throwable);
+    }
 
-    implementation 'org.slf4j:slf4j-api'
-    implementation 'org.apache.logging.log4j:log4j-core'
-    implementation 'org.apache.logging.log4j:log4j-slf4j-impl'
-
-    implementation 'com.fasterxml.jackson.core:jackson-databind'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }

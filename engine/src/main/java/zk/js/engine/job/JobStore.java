@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-plugins {
-    id 'zk.js.java-base-conventions'
-}
+package zk.js.engine.job;
 
-archivesBaseName = "job-scheduler-engine"
+/**
+ * 用户保存历史Job信息
+ */
+public interface JobStore {
 
-dependencies {
-    implementation "org.projectlombok:lombok"
+    void saveJob(Job job) throws JobStoreException;
 
-    implementation 'org.slf4j:slf4j-api'
-    implementation 'org.apache.logging.log4j:log4j-core'
-    implementation 'org.apache.logging.log4j:log4j-slf4j-impl'
+    Job getJob(String jobId) throws JobStoreException;
 
-    implementation 'com.fasterxml.jackson.core:jackson-databind'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    long getJobCount() throws JobStoreException;
+
 }

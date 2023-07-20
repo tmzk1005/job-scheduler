@@ -25,4 +25,4 @@ pluginManagement {
 rootProject.name = "job-scheduler"
 
 include 'engine'
-
+include 'engine-jgroups'
