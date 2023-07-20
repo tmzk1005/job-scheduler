@@ -14,15 +14,7 @@
  * limitations under the License.
  */
 
-pluginManagement {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        gradlePluginPortal()
-    }
+plugins {
+    id 'zk.js.java-base-conventions'
 }
-
-rootProject.name = "job-scheduler"
-
-include 'engine'
 
