@@ -47,5 +47,36 @@ formatter {
     importOrder = ["java", "javax", "", "zk.js", "#"]
 }
 
+def lombokVersion = "1.18.26"
+def jacksonVersion = "2.15.1"
+def slf4jApiVersion = "1.7.36"
+def log4j2Version = "2.20.0"
+def junitJupiterVersion = "5.9.3"
+
+
 dependencies {
+    implementation platform("org.projectlombok:lombok:${lombokVersion}")
+    implementation platform("com.fasterxml.jackson:jackson-bom:${jacksonVersion}")
+    implementation platform("org.slf4j:slf4j-api:${slf4jApiVersion}")
+    implementation platform("org.apache.logging.log4j:log4j-bom:${log4j2Version}")
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter:${junitJupiterVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}"
+
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 }
+
+tasks.named('test', Test) {
+    useJUnitPlatform()
+    maxHeapSize = '1G'
+
+    testLogging {
+        events "passed", "failed", "skipped", "standardOut", "standardError"
+        exceptionFormat "short"
+        showCauses true
+    }
+}
+
