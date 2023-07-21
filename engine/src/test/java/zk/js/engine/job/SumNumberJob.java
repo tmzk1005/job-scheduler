@@ -15,6 +15,8 @@
  */
 package zk.js.engine.job;
 
+import java.util.UUID;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,7 +29,7 @@ public class SumNumberJob extends AbstractJob {
     private static Integer result;
 
     protected SumNumberJob(JobDefinition jobDefinition) {
-        super(jobDefinition);
+        super(jobDefinition, UUID.randomUUID().toString());
         this.jobContext = new JobContext();
     }
 

@@ -17,6 +17,7 @@ package zk.js.engine;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -71,6 +72,10 @@ public abstract class AbstractJobEngine extends BaseLifecycleService implements 
             );
             throw new IllegalStateException("A job with same job definition id = " + jobDefinition.getId() + " is already running.");
         }
+        return doRunJob(jobDefinition, UUID.randomUUID().toString());
+    }
+
+    protected String doRunJob(JobDefinition jobDefinition, String jobId) throws Exception {
         if (runningJobs.size() >= maxRunningJobCount) {
             log.warn("Can not run job with job definition id = {}, max job count reached.", jobDefinition.getId());
             throw new IllegalStateException("Can not run job with job definition id = " + jobDefinition.getId() + ", max job count reached.");
@@ -79,6 +84,7 @@ public abstract class AbstractJobEngine extends BaseLifecycleService implements 
             synchronized (lock) {
                 if (isStarted()) {
                     Job job = getJobConverter().convertJobDefinition(jobDefinition);
+                    job.setId(jobId);
                     job.init();
                     if (!job.getState().isInitialized()) {
                         throw new IllegalStateException("Job with id = {} init failed", job.getFailException());
@@ -203,6 +209,14 @@ public abstract class AbstractJobEngine extends BaseLifecycleService implements 
         } catch (JobStoreException exception) {
             log.error("Failed to get job by id = {}", jobId, exception);
             return null;
+        }
+    }
+
+    @Override
+    protected void doStop() throws Exception {
+        log.info("JobEngine is going to stop, stop all running jobs.");
+        for (JobAndFuture jobAndFuture : runningJobs.values()) {
+            jobAndFuture.job.stop();
         }
     }
 

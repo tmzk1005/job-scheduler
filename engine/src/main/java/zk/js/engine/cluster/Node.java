@@ -13,16 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package zk.js.engine.cluster;
 
-plugins {
-    id 'zk.js.java-base-conventions'
-}
+import java.io.Serializable;
 
-archivesBaseName = "job-scheduler-engine-jgroups"
+public interface Node<T extends Serializable> extends Serializable {
 
-dependencies {
-    implementation project(path: ":engine", configuration: "default")
+    /**
+     * 节点的唯一标识id
+     */
+    String getId();
 
-    implementation "org.jgroups:jgroups"
-    implementation "org.jgroups:jgroups-raft"
+    /**
+     * 节点的通信地址
+     */
+    T getAddress();
+
 }

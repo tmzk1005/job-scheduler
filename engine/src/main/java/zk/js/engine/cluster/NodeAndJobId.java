@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package zk.js.engine.cluster;
 
-plugins {
-    id 'zk.js.java-base-conventions'
-}
+import lombok.Getter;
+import lombok.Setter;
 
-archivesBaseName = "job-scheduler-engine-jgroups"
+@Getter
+@Setter
+public class NodeAndJobId<N extends Node<?>> {
 
-dependencies {
-    implementation project(path: ":engine", configuration: "default")
+    private N node;
 
-    implementation "org.jgroups:jgroups"
-    implementation "org.jgroups:jgroups-raft"
+    private String jobId;
+
 }

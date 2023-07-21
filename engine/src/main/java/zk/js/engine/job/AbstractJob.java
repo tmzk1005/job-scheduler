@@ -15,20 +15,17 @@
  */
 package zk.js.engine.job;
 
-import java.util.UUID;
-
 import zk.js.engine.common.BaseLifecycleService;
 
 public abstract class AbstractJob extends BaseLifecycleService implements Job {
 
-    protected final String id;
+    protected String id;
 
     protected final JobDefinition jobDefinition;
 
     protected final Status status = new Status();
 
     protected AbstractJob(JobDefinition jobDefinition) {
-        this.id = UUID.randomUUID().toString();
         this.jobDefinition = jobDefinition;
     }
 
@@ -45,6 +42,11 @@ public abstract class AbstractJob extends BaseLifecycleService implements Job {
     @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override

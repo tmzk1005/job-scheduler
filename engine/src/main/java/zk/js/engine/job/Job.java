@@ -28,6 +28,8 @@ public interface Job extends LifecycleService, Runnable {
 
     String getId();
 
+    void setId(String jobId);
+
     JobDefinition jobDefinition();
 
     Status getStatus();
