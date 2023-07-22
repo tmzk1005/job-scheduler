@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -48,6 +49,8 @@ public abstract class AbstractJobEngine extends BaseLifecycleService implements 
 
     protected final Map<String, JobAndFuture> runningJobs = new ConcurrentHashMap<>(4);
 
+    private final AtomicInteger startingJobCounter = new AtomicInteger(0);
+
     protected AbstractJobEngine(JobConverter jobConverter, ExecutorService executorService, JobStore jobStore) {
         this.jobConverter = jobConverter;
         this.executorService = executorService;
@@ -64,15 +67,24 @@ public abstract class AbstractJobEngine extends BaseLifecycleService implements 
 
     @Override
     public String runJob(JobDefinition jobDefinition, boolean singleton) throws Exception {
-        if (singleton && existJobRunningWithDefinitionId(jobDefinition.getId())) {
-            log.warn(
-                    "Can not run job with definition id = {}, a job with same job definition id is running now, " +
-                            "and only one instance is allowed for this job definition.",
-                    jobDefinition.getId()
-            );
-            throw new IllegalStateException("A job with same job definition id = " + jobDefinition.getId() + " is already running.");
+        if (startingJobCounter.incrementAndGet() > 20) {
+            log.error("There is too many run job request now, refuse to run job with definition id = {}", jobDefinition.getId());
+            startingJobCounter.decrementAndGet();
+            throw new Exception("Too many run job request, try later");
         }
-        return doRunJob(jobDefinition, UUID.randomUUID().toString());
+        try {
+            if (singleton && existJobRunningWithDefinitionId(jobDefinition.getId())) {
+                log.warn(
+                        "Can not run job with definition id = {}, a job with same job definition id is running now, " +
+                                "and only one instance is allowed for this job definition.",
+                        jobDefinition.getId()
+                );
+                throw new IllegalStateException("A job with same job definition id = " + jobDefinition.getId() + " is already running.");
+            }
+            return doRunJob(jobDefinition, UUID.randomUUID().toString());
+        } finally {
+            startingJobCounter.decrementAndGet();
+        }
     }
 
     protected String doRunJob(JobDefinition jobDefinition, String jobId) throws Exception {
